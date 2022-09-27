@@ -45,6 +45,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -59,4 +60,10 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    // 네이버 지도 SDK
+    implementation 'com.naver.maps:map-sdk:3.16.0'
+    // FusedLocationSource를 사용하려면 play-services-location 의존성도 추가해야 합니다.
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    // 네이버 지도 Compose 라이브러리
+    implementation "io.github.fornewid:naver-map-compose:1.1.7"
 }
