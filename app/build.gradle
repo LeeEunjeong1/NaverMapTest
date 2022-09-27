@@ -65,5 +65,5 @@ dependencies {
     // FusedLocationSource를 사용하려면 play-services-location 의존성도 추가해야 합니다.
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     // 네이버 지도 Compose 라이브러리
-    implementation "io.github.fornewid:naver-map-compose:1.1.7"
+    implementation "io.github.fornewid:naver-map-compose:1.1.2"
 }
