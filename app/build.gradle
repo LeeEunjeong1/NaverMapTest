@@ -65,5 +65,13 @@ dependencies {
     // FusedLocationSource를 사용하려면 play-services-location 의존성도 추가해야 합니다.
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     // 네이버 지도 Compose 라이브러리
-    implementation "io.github.fornewid:naver-map-compose:1.1.2"
+    implementation 'io.github.fornewid:naver-map-compose:1.1.2'
+    // retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
 }

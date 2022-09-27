@@ -1,8 +1,10 @@
 package com.example.navermaptest
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,17 +23,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.navermaptest.model.Station
 import com.example.navermaptest.ui.theme.NaverMapTestTheme
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+private lateinit var stationList : ArrayList<Station>
+private lateinit var viewModel: MainViewModel
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             MainView()
+            // viewModel 초기화
+            viewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
+            viewModel.getStation(0,100)
+            viewModel.isSuccess.observe(this@MainActivity){
+                for (station in it) {
+                    stationList.add(station)
+                }
+            }
         }
     }
 }
@@ -118,5 +141,11 @@ fun SearchBarArea(
 fun MapArea() {
     NaverMap(
         modifier = Modifier.fillMaxSize()
-    )
+    ){
+       stationList.forEach{
+           Marker(
+               state = MarkerState(position = LatLng(it.lat.toDouble(),it.longi.toDouble()))
+           )
+       }
+    }
 }
