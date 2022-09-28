@@ -1,6 +1,5 @@
 package com.example.navermaptest
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.example.navermaptest.model.Station
 import com.example.navermaptest.model.StationResponse
@@ -8,7 +7,6 @@ import com.example.navermaptest.network.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okio.ByteString
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

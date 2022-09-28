@@ -7,8 +7,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private var retrofitClient: Retrofit? = null
-    private val TAG: String = "Retrofit 통신"
     private val BASE_URL = "https://api.odcloud.kr/api/"
 
     fun getClient(): Retrofit?{
