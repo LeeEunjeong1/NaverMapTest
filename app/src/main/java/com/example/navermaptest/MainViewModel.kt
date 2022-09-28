@@ -24,7 +24,6 @@ class MainViewModel(private val repository:Repository):ViewModel() {
     fun getStation(page:Int, perPage:Int){
         CoroutineScope(Dispatchers.Default).launch {
             try{
-
                 val response = repository.getStation(page,perPage)
                 response?.enqueue(object : Callback<StationResponse>{
                     override fun onFailure(call: Call<StationResponse>, t: Throwable) {

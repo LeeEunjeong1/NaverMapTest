@@ -23,37 +23,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.bumptech.glide.Glide
 import com.example.navermaptest.model.Station
+import com.example.navermaptest.network.ApiClient
+import com.example.navermaptest.network.Repository
 import com.example.navermaptest.ui.theme.NaverMapTestTheme
+import com.google.android.gms.common.api.GoogleApiClient
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.overlay.OverlayImage
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-private lateinit var stationList : ArrayList<Station>
-private lateinit var viewModel: MainViewModel
+private var stationList: MutableList<Station> = mutableListOf()
+
 class MainActivity : ComponentActivity() {
+    private lateinit var viewModel: MainViewModel
+    private val apiClient = ApiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // viewModel 초기화
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(Repository(apiClient))
+        )[MainViewModel::class.java]
 
         setContent {
+            observeViewModel()
             MainView()
-            // viewModel 초기화
-            viewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
-            viewModel.getStation(0,100)
-            viewModel.isSuccess.observe(this@MainActivity){
-                for (station in it) {
-                    stationList.add(station)
-                }
+        }
+    }
+
+    fun observeViewModel() {
+        viewModel.getStation(1, 100)
+        viewModel.isSuccess.observe(this@MainActivity) {
+            for (station in it) {
+                stationList.add(station)
             }
         }
     }
@@ -87,7 +98,6 @@ fun MainView() {
             content = {
                 Box() {
                     MapArea()
-                    SearchBarArea(scope, drawerState)
                 }
             }
         )
@@ -107,45 +117,18 @@ fun drawerMenuArea(
     )
 }
 
-@Composable
-fun SearchBarArea(
-    coroutineScope: CoroutineScope,
-    drawerState: DrawerState
-) {
-    Card(
-        elevation = 16.dp,
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(16.dp),
-    ) {
-        Row() {
-            IconButton(
-                onClick = { coroutineScope.launch { drawerState.open() } }
-            ) {
-                Icon(
-                    Icons.Filled.Menu,
-                    contentDescription = "slide menu"
-                )
-            }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically),
-                text = "text",
-                color = Color.Gray)
-        }
-    }
-}
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapArea() {
     NaverMap(
         modifier = Modifier.fillMaxSize()
-    ){
-       stationList.forEach{
-           Marker(
-               state = MarkerState(position = LatLng(it.lat.toDouble(),it.longi.toDouble()))
-           )
-       }
+    ) {
+        stationList.forEach {
+            Marker(
+                state = MarkerState(position = LatLng(it.lat.toDouble(), it.longi.toDouble())),
+                icon = OverlayImage.fromResource(R.drawable.ic_launcher_foreground)
+            )
+        }
     }
 }

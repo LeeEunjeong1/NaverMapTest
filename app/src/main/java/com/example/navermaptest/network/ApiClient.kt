@@ -6,7 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitClient {
+object ApiClient {
     private var retrofitClient: Retrofit? = null
     private val TAG: String = "Retrofit 통신"
     private val BASE_URL = "https://api.odcloud.kr/api/"
@@ -16,7 +16,6 @@ object RetrofitClient {
         //통신 로그
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
 
         val headerInterceptor = Interceptor {
             val request = it.request()
